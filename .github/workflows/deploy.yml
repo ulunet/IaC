@@ -60,9 +60,9 @@ jobs:
         run: |
           az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_FILE_1" --parameters "$ARM_PARM_FILE_1"
 
-      - name: Validate deployment template #2
-        run: |
-          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_FILE_2" --parameters "$ARM_PARM_FILE_2"
+      # - name: Validate deployment template #2
+      #   run: |
+      #     az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_FILE_2" --parameters "$ARM_PARM_FILE_2"
 
       - name: Deploy template #1
         run: |
@@ -71,9 +71,9 @@ jobs:
               --template-file "$ARM_TEMPLATE_FILE_1"  \
               --parameters "$ARM_PARM_FILE_1"
 
-      - name: Deploy template #2
-        run: |
-             az deployment group create \
-              --resource-group "$APP_RESOURCE_GROUP"  \
-              --template-file "$ARM_TEMPLATE_FILE_2"  \
-              --parameters "$ARM_PARM_FILE_2"
+      # - name: Deploy template #2
+      #   run: |
+      #        az deployment group create \
+      #         --resource-group "$APP_RESOURCE_GROUP"  \
+      #         --template-file "$ARM_TEMPLATE_FILE_2"  \
+      #         --parameters "$ARM_PARM_FILE_2"
