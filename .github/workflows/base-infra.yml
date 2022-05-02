@@ -8,17 +8,15 @@ on:
         description: Environment to deploy to
         required: true
 
-# Environment variables available to all jobs and steps in this workflow
+# Environment variables - you need to define the respective github secrets
 env:
-  ARM_TEMPLATE_1: secrets.AZURE_SUBSCRIPTION_ID
-  ARM_PARAM_FILE_1: "${{ github.event.inputs.env_to_deploy }}"
-  ARM_PARAM_FILE_2: "${{ github.event.inputs.env_to_deploy }}-2.json"
-  
-  APP_RESOURCE_GROUP: "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}-rg"
-  APP_LOCATION: "/" # location of your client code
-  API_LOCATION: "api" # location of your api source code - optional
-  APP_ARTIFACT_LOCATION: "build" # location of client code build output
-  AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # secret containing deployment token for your static web app
+  ARM_TEMPLATE_1: "./IaC/${{ secrets.AZURE_TEMPLATE_1 }}" #example: base.json
+  ARM_TEMPLATE_2: "./IaC/${{ secrets.AZURE_TEMPLATE_2 }}" #optional - example: aks.json
+  ARM_PARAM_FILE_1: "./IaC/parms/${{ secrets.AZURE_PARM_1 }}" #example: NORTHWIND-TRADERS-base-parm.json
+  ARM_PARAM_FILE_2: "./IaC/parms/${{ secrets.AZURE_PARM_2 }}" #optional example: NORTHWIND-TRADERS-aks-parm.json
+  LOCATION: "${{ secrets.AZURE_LOCATION }}" #example: NorthSwitzerland
+  SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}" #example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
+  APP_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}-rg"
 
 jobs:
   validate_and_deploy_job:
