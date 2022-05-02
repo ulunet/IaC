@@ -23,8 +23,8 @@ on:
         required: true
 
 env:
-  ARM_TEMPLATE_FILE_1: "./IaC/${{ secrets.AZURE_TEMPLATE_FILE_1 }}"
-  ARM_TEMPLATE_FILE_2: "./IaC/${{ secrets.AZURE_TEMPLATE_FILE_2 }}"
+  ARM_TEMPLATE_FILE_1: "./IaC/${{ secrets.ARM_TEMPLATE_FILE_1 }}"
+  ARM_TEMPLATE_FILE_2: "./IaC/${{ secrets.ARM_TEMPLATE_FILE_2 }}"
   ARM_PARM_FILE_1: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_1 }}"
   ARM_PARM_FILE_2: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_2 }}"
 
@@ -39,7 +39,7 @@ jobs:
 
       - name: Display vars
         run: |
-             echo "template file 1: ${ARM_TEMPLATE_FILE_1}"
+             test= "template file 1: ${ARM_TEMPLATE_FILE_1}"
              echo "parm file 1: ${ARM_PARM_FILE_1}"
              echo "template file 2: ${ARM_TEMPLATE_FILE_2}"
              echo "parm file 2: ${ARM_PARM_FILE_2}"
@@ -61,10 +61,9 @@ jobs:
               --template-file ./IaC/Utils/rg.bicep \
               --parameters name=${{ secrets.AZURE_RESOURCE_GROUP }} location=${{ secrets.AZURE_LOCATION }}
 
-                   
       - name: Validate deployment template #1
         run: |
-          az group deployment validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file "$ARM_TEMPLATE_FILE_1" --parameters "$ARM_PARM_FILE_1"
+          az group deployment validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file $ARM_TEMPLATE_FILE_1 --parameters $ARM_PARM_FILE_1
 
 
       # - name: Validate deployment template #2
@@ -75,8 +74,8 @@ jobs:
         run: |
              az deployment group create \
               --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}  \
-              --template-file "$ARM_TEMPLATE_FILE_1"  \
-              --parameters "$ARM_PARM_FILE_1"
+              --template-file $ARM_TEMPLATE_FILE_1  \
+              --parameters $ARM_PARM_FILE_1
 
       # - name: Deploy template #2
       #   run: |
