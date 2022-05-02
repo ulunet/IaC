@@ -3,16 +3,18 @@ name: Deploy base infra template
 on:
   workflow_dispatch:
     inputs:
-      env_to_deploy:
-        description: Environment to deploy to
-        default: NORTHWIND-TRADERS-BASE-PLAT
-        required: true
       environment:
         type: environment
+        description: Environment to deploy to
         required: true
 
 # Environment variables available to all jobs and steps in this workflow
 env:
+  ARM_TEMPLATE_1: secrets.AZURE_SUBSCRIPTION_ID
+  ARM_PARAM_FILE_1: "${{ github.event.inputs.env_to_deploy }}"
+  ARM_PARAM_FILE_2: "${{ github.event.inputs.env_to_deploy }}-2.json"
+  
+  APP_RESOURCE_GROUP: "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}-rg"
   APP_LOCATION: "/" # location of your client code
   API_LOCATION: "api" # location of your api source code - optional
   APP_ARTIFACT_LOCATION: "build" # location of client code build output
@@ -28,6 +30,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        #see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux
+        #    az account list-locations -o table
+
+      - name: Set default Azure subscription
+        run: az account set -s ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Create Azure resource group
+        run: |
+             az deployment sub create \
+              --location ${{ secrets.AZURE_LOCATION }} \
+              --template-file ./IaC/deployment-rg.bicep \
+              --parameters name=${{ secrets.AZURE_RESOURCE_GROUP }} location=${{ secrets.AZURE_LOCATION }}
+              
+      - name: Validate deployment template(s)
+        run: |
+          az group deployment validate --resource-group ${{ AZURE_RESOURCE_GROUP }} --template-file ./IaC/base.json
+          
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
