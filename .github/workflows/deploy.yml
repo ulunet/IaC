@@ -27,6 +27,7 @@ env:
   ARM_TEMPLATE_FILE_2: "./IaC/${{ secrets.ARM_TEMPLATE_FILE_2 }}"
   ARM_PARM_FILE_1: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_1 }}"
   ARM_PARM_FILE_2: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_2 }}"
+  ARM_TEMPLATE_FILE_NAME_2: "${{ secrets.ARM_TEMPLATE_FILE_1 }}"
 
 jobs:
   validate_and_deploy_job:
@@ -37,6 +38,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Check template(s) existence
+        id: checktemplatesavailable
+        run: |
+             if [ -z "${{ secrets.ARM_TEMPLATE_FILE_2 }}" ]; then
+                echo "ERROR: ARM_TEMPLATE_FILE_1 secret should contain your ARM template file name"
+                exit 1
+             fi
+             if [ -z "${{ secrets.ARM_PARM_FILE_2 }}" ]; then
+                echo "ERROR: ARM_PARM_FILE_2 secret should contain your ARM template parameter file name"
+                exit 1
+             fi
+             if [ -n "${{ secrets.ARM_TEMPLATE_FILE_2 }}" ]; then
+                echo ::set-output name=DEPLOY_TEMPLATE_NR_2::true
+             else
+                echo ::set-output name=DEPLOY_TEMPLATE_NR_2::false
+             fi
       - name: Azure login
         uses: azure/login@v1
         with:
@@ -56,12 +73,13 @@ jobs:
 
       - name: Validate deployment template #1
         run: |
-          az group deployment validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file $ARM_TEMPLATE_FILE_1 --parameters $ARM_PARM_FILE_1
+             az deployment group validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file $ARM_TEMPLATE_FILE_1 --parameters $ARM_PARM_FILE_1
 
 
-      # - name: Validate deployment template #2
-      #   run: |
-      #     az group deployment validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file "$ARM_TEMPLATE_FILE_2" --parameters "$ARM_PARM_FILE_2"
+      - name: Validate deployment template #2
+        if: ${{ steps.checktemplatesavailable.outputs.DEPLOY_TEMPLATE_NR_2 }}
+        run: |
+             az deployment group validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file $ARM_TEMPLATE_FILE_2 --parameters $ARM_PARM_FILE_2
 
       - name: Deploy template #1
         run: |
@@ -70,9 +88,10 @@ jobs:
               --template-file $ARM_TEMPLATE_FILE_1  \
               --parameters $ARM_PARM_FILE_1
 
-      # - name: Deploy template #2
-      #   run: |
-      #        az deployment group create \
-      #         --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}  \
-      #         --template-file "$ARM_TEMPLATE_FILE_2"  \
-      #         --parameters "$ARM_PARM_FILE_2"
+      - name: Deploy template #2
+        if: ${{ steps.checktemplatesavailable.outputs.DEPLOY_TEMPLATE_NR_2 }}
+        run: |
+              az deployment group create \
+              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}  \
+              --template-file $ARM_TEMPLATE_FILE_2  \
+              --parameters $ARM_PARM_FILE_2
