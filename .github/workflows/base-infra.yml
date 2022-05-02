@@ -8,8 +8,8 @@ name: Deploy base infra template
 # ARM_PARAM_FILE_1 for ARM_TEMPLATE_1 - for example NORTHWIND-TRADERS-base-parm.json
 #
 # OPTIONAL:
-#
-#
+#  ARM_TEMPLATE_2: second (optional) template to deploy, for example: aks.json
+#  ARM_PARAM_FILE_2: parm file for the second template file, for example: NORTHWIND-TRADERS-aks-parm.json
 
 on:
   workflow_dispatch:
