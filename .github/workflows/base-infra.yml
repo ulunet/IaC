@@ -5,7 +5,10 @@ on:
     inputs:
       env_to_deploy:
         description: Environment to deploy to
-        default: dev
+        default: NORTHWIND-TRADERS-BASE-PLAT
+        required: true
+      environment:
+        type: environment
         required: true
 
 # Environment variables available to all jobs and steps in this workflow
