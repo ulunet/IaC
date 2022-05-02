@@ -37,13 +37,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Display vars
-        run: |
-             test= "template file 1: ${ARM_TEMPLATE_FILE_1}"
-             echo "parm file 1: ${ARM_PARM_FILE_1}"
-             echo "template file 2: ${ARM_TEMPLATE_FILE_2}"
-             echo "parm file 2: ${ARM_PARM_FILE_2}"
-
       - name: Azure login
         uses: azure/login@v1
         with:
