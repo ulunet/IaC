@@ -27,7 +27,6 @@ env:
   ARM_TEMPLATE_FILE_2: "./IaC/${{ secrets.AZURE_TEMPLATE_FILE_2 }}"
   ARM_PARM_FILE_1: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_1 }}"
   ARM_PARM_FILE_2: "./IaC/Parms/${{ secrets.ARM_PARM_FILE_2 }}"
-  APP_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}"
 
 jobs:
   validate_and_deploy_job:
@@ -52,7 +51,7 @@ jobs:
         run: |
              az deployment sub create \
               --location "${{ secrets.AZURE_LOCATION }}" \
-              --template-file ./IaC/Utils/deployment-rg.bicep \
+              --template-file ./IaC/Utils/rg.bicep \
               --parameters name=${{ secrets.AZURE_RESOURCE_GROUP }} location=${{ secrets.AZURE_LOCATION }}
               
       - name: Validate deployment template #1
