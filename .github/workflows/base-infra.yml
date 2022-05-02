@@ -8,6 +8,7 @@ on:
         description: Environment to deploy to
         required: true
 
+
 # Environment variables - you need to define the respective github secrets
 env:
   ARM_TEMPLATE_1: "./IaC/${{ secrets.AZURE_TEMPLATE_1 }}" #example: base.json
