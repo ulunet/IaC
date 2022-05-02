@@ -52,7 +52,7 @@ jobs:
         run: |
              az deployment sub create \
               --location "${{ secrets.AZURE_LOCATION }}" \
-              --template-file ./IaC/utils/deployment-rg.bicep \
+              --template-file ./IaC/Utils/deployment-rg.bicep \
               --parameters name="$APP_RESOURCE_GROUP location="${{ secrets.AZURE_LOCATION }}"
               
       - name: Validate deployment template #1
