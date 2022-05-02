@@ -1,4 +1,4 @@
-name: Deploy base infra template
+name: Deploy template(s)
 
 # Deployment templates are expected in ./IaC/
 #                    .... parameter in ./IaC/Parms
