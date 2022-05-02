@@ -2,17 +2,33 @@ name: Deploy template(s)
 
 # Deployment templates are expected in ./IaC/
 #                    .... parameter in ./IaC/Parms
+#
 # Following secrets are expected in environment or repo secrets:
-# AZURE_CREDENTIALS: Azure credentials, see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux for how to create these
-# AZURE_LOCATION: Azure location, for example: NorthSwitzerland
-# AZURE_SUBSCRIPTION_ID: Azure subscrition's id to deploy into, for example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
-# AZURE_RESOURCE_GROUP: Resource group to create
-# ARM_TEMPLATE_FILE_1: ARM template #1 - for example base.json
-# ARM_PARM_FILE_1 for ARM_TEMPLATE_1 - for example NORTHWIND-TRADERS-base.parameters.json
+#
+#   AZURE_CREDENTIALS:
+#       Azure credentials, see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux for how to create these
+#
+#   AZURE_LOCATION:
+#       Azure location, for example: NorthSwitzerland
+#
+#   AZURE_SUBSCRIPTION_ID:
+#       Azure subscrition's id to deploy into, for example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
+#
+#   AZURE_RESOURCE_GROUP:
+#       Resource group to create
+#
+#   ARM_TEMPLATE_FILE_1:
+#       ARM template #1 - for example base.json
+#
+#   ARM_PARM_FILE_1
+#       for ARM_TEMPLATE_1 - for example NORTHWIND-TRADERS-base.parameters.json
 #
 # OPTIONAL:
-#  ARM_TEMPLATE_FILE_2: second (optional) template to deploy, for example: aks.json
-#  ARM_PARM_FILE_2: parm file for the second template file, for example: NORTHWIND-TRADERS-aks.parameters.json
+#    ARM_TEMPLATE_FILE_2: second (optional) template to deploy, for example: aks.json
+#    ARM_PARM_FILE_2: parm file for the second template file, for example: NORTHWIND-TRADERS-aks.parameters.json
+#
+# For available locations, use:
+#     az account list-locations -o table
 
 on:
   workflow_dispatch:
@@ -41,12 +57,12 @@ jobs:
       - name: Check template(s) existence
         id: checktemplatesavailable
         run: |
-             if [ -z "${{ secrets.ARM_TEMPLATE_FILE_2 }}" ]; then
+             if [ -z "${{ secrets.ARM_TEMPLATE_FILE_1 }}" ]; then
                 echo "ERROR: ARM_TEMPLATE_FILE_1 secret should contain your ARM template file name"
                 exit 1
              fi
-             if [ -z "${{ secrets.ARM_PARM_FILE_2 }}" ]; then
-                echo "ERROR: ARM_PARM_FILE_2 secret should contain your ARM template parameter file name"
+             if [ -z "${{ secrets.ARM_PARM_FILE_1 }}" ]; then
+                echo "ERROR: ARM_PARM_FILE_1 secret should contain your ARM template parameter file name"
                 exit 1
              fi
              if [ -n "${{ secrets.ARM_TEMPLATE_FILE_2 }}" ]; then
@@ -54,12 +70,13 @@ jobs:
              else
                 echo ::set-output name=DEPLOY_TEMPLATE_NR_2::false
              fi
-      - name: Azure login
+      
+      - name: Azure login #see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-        #see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux
-        #    az account list-locations -o table
+
+          
 
       - name: Set default Azure subscription
         run: az account set -s "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
