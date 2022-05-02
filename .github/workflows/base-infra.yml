@@ -69,3 +69,10 @@ jobs:
               --resource-group "$APP_RESOURCE_GROUP"  \
               --template-file "$ARM_TEMPLATE_1"  \
               --parameters "$ARM_PARAM_FILE_1"
+
+      - name: Deploy template #2
+        run: |
+             az deployment group create \
+              --resource-group "$APP_RESOURCE_GROUP"  \
+              --template-file "$ARM_TEMPLATE_2"  \
+              --parameters "$ARM_PARAM_FILE_2"
