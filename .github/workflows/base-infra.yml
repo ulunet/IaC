@@ -24,8 +24,8 @@ on:
 env:
   ARM_TEMPLATE_1: "./IaC/${{ secrets.AZURE_TEMPLATE_1 }}" #example: base.json
   ARM_TEMPLATE_2: "./IaC/${{ secrets.AZURE_TEMPLATE_2 }}" #optional - example: aks.json
-  ARM_PARAM_FILE_1: "./IaC/parms/${{ secrets.AZURE_PARM_1 }}" #example: NORTHWIND-TRADERS-base-parm.json
-  ARM_PARAM_FILE_2: "./IaC/parms/${{ secrets.AZURE_PARM_2 }}" #optional example: NORTHWIND-TRADERS-aks-parm.json
+  ARM_PARAM_FILE_1: "./IaC/Parms/${{ secrets.AZURE_PARM_1 }}" #example: NORTHWIND-TRADERS-base-parm.json
+  ARM_PARAM_FILE_2: "./IaC/Parms/${{ secrets.AZURE_PARM_2 }}" #optional example: NORTHWIND-TRADERS-aks-parm.json
   APP_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}"
 
 jobs:
