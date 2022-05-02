@@ -37,15 +37,15 @@ jobs:
         #    az account list-locations -o table
 
       - name: Set default Azure subscription
-        run: az account set -s ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: az account set -s "$SUBSCRIPTION_ID"
       
       - name: Create Azure resource group
         run: |
              az deployment sub create \
-              --location ${{ secrets.AZURE_LOCATION }} \
+              --location $LOCATION \
               --template-file ./IaC/deployment-rg.bicep \
-              --parameters name=${{ secrets.AZURE_RESOURCE_GROUP }} location=${{ secrets.AZURE_LOCATION }}
+              --parameters name="$APP_RESOURCE_GROUP location="$LOCATION"
               
       - name: Validate deployment template(s)
         run: |
-          az group deployment validate --resource-group ${{ AZURE_RESOURCE_GROUP }} --template-file ./IaC/base.json
+          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_1"
