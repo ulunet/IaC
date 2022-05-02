@@ -37,6 +37,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Display vars
+        run: |
+             echo "template file 1: ${ARM_TEMPLATE_FILE_1}"
+             echo "parm file 1: ${ARM_PARM_FILE_1}"
+             echo "template file 2: ${ARM_TEMPLATE_FILE_2}"
+             echo "parm file 2: ${ARM_PARM_FILE_2}"
+
       - name: Azure login
         uses: azure/login@v1
         with:
@@ -53,10 +60,12 @@ jobs:
               --location "${{ secrets.AZURE_LOCATION }}" \
               --template-file ./IaC/Utils/rg.bicep \
               --parameters name=${{ secrets.AZURE_RESOURCE_GROUP }} location=${{ secrets.AZURE_LOCATION }}
-              
+
+                   
       - name: Validate deployment template #1
         run: |
           az group deployment validate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file "$ARM_TEMPLATE_FILE_1" --parameters "$ARM_PARM_FILE_1"
+
 
       # - name: Validate deployment template #2
       #   run: |
