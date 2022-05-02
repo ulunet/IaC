@@ -32,8 +32,7 @@ env:
 jobs:
   validate_and_deploy_job:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment }}
 
     name: Build and Deploy Job
     steps:
