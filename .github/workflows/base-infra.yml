@@ -55,6 +55,17 @@ jobs:
               --template-file ./IaC/utils/deployment-rg.bicep \
               --parameters name="$APP_RESOURCE_GROUP location="${{ secrets.AZURE_LOCATION }}"
               
-      - name: Validate deployment template(s)
+      - name: Validate deployment template #1
         run: |
           az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_1" --parameters "$ARM_PARAM_FILE_1"
+
+      - name: Validate deployment template #2
+        run: |
+          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_2" --parameters "$ARM_PARAM_FILE_2"
+
+      - name: Deploy template #1
+        run: |
+             az deployment group create \
+              --resource-group "$APP_RESOURCE_GROUP"  \
+              --template-file "$ARM_TEMPLATE_1"  \
+              --parameters "$ARM_PARAM_FILE_1"
