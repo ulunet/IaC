@@ -4,8 +4,8 @@ name: Deploy template(s)
 #                    .... parameter in ./IaC/Parms
 # Following secrets are expected in environment or repo secrets:
 # AZURE_CREDENTIALS: Azure credentials, see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux for how to create these
-# LOCATION: Azure location, for example: NorthSwitzerland
-# SUBSCRIPTION_ID: Azure subscrition's id to deploy into, for example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
+# AZURE_LOCATION: Azure location, for example: NorthSwitzerland
+# AZURE_SUBSCRIPTION_ID: Azure subscrition's id to deploy into, for example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
 # ARM_TEMPLATE_FILE_1: ARM template #1 - for example base.json
 # ARM_PARM_FILE_1 for ARM_TEMPLATE_1 - for example NORTHWIND-TRADERS-base-parm.json
 #
