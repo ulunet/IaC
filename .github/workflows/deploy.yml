@@ -6,11 +6,11 @@ name: Deploy template(s)
 # AZURE_CREDENTIALS: Azure credentials, see https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux for how to create these
 # LOCATION: Azure location, for example: NorthSwitzerland
 # SUBSCRIPTION_ID: Azure subscrition's id to deploy into, for example: 3a98dd0b-3278-4919-8a6f-01c3ebf51541
-# ARM_TEMPLATE_1: ARM template #1 - for example base.json
+# ARM_TEMPLATE_FILE_1: ARM template #1 - for example base.json
 # ARM_PARAM_FILE_1 for ARM_TEMPLATE_1 - for example NORTHWIND-TRADERS-base-parm.json
 #
 # OPTIONAL:
-#  ARM_TEMPLATE_2: second (optional) template to deploy, for example: aks.json
+#  ARM_TEMPLATE_FILE_2: second (optional) template to deploy, for example: aks.json
 #  ARM_PARAM_FILE_2: parm file for the second template file, for example: NORTHWIND-TRADERS-aks-parm.json
 
 on:
@@ -57,22 +57,22 @@ jobs:
               
       - name: Validate deployment template #1
         run: |
-          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_1" --parameters "$ARM_PARAM_FILE_1"
+          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_FILE_1" --parameters "$ARM_PARAM_FILE_1"
 
       - name: Validate deployment template #2
         run: |
-          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_2" --parameters "$ARM_PARAM_FILE_2"
+          az group deployment validate --resource-group "$APP_RESOURCE_GROUP" --template-file "$ARM_TEMPLATE_FILE_2" --parameters "$ARM_PARAM_FILE_2"
 
       - name: Deploy template #1
         run: |
              az deployment group create \
               --resource-group "$APP_RESOURCE_GROUP"  \
-              --template-file "$ARM_TEMPLATE_1"  \
+              --template-file "$ARM_TEMPLATE_FILE_1"  \
               --parameters "$ARM_PARAM_FILE_1"
 
       - name: Deploy template #2
         run: |
              az deployment group create \
               --resource-group "$APP_RESOURCE_GROUP"  \
-              --template-file "$ARM_TEMPLATE_2"  \
+              --template-file "$ARM_TEMPLATE_FILE_2"  \
               --parameters "$ARM_PARAM_FILE_2"
